@@ -1,4 +1,4 @@
-QT += core sql
+QT += core sql widgets
 
 CONFIG += c++17 cmdline
 
@@ -11,7 +11,8 @@ SOURCES += \
         business.cpp \
         main.cpp \
         message.cpp \
-        messageconvecter.cpp
+        messageconvecter.cpp \
+        pivobackend.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -22,7 +23,8 @@ HEADERS += \
     bd.h \
     business.h \
     message.h \
-    messageconvecter.h
+    messageconvecter.h \
+    pivobackend.h
 
 
 # Includes
