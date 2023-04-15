@@ -1,4 +1,5 @@
-QT = core
+QT = core \
+    widgets
 
 CONFIG += c++17 cmdline
 
@@ -10,6 +11,7 @@ SOURCES += \
         main.cpp \
         message.cpp \
         messageconvecter.cpp
+        pivobackend.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -19,3 +21,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     message.h \
     messageconvecter.h
+    pivobackend.h
