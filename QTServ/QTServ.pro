@@ -10,7 +10,7 @@ CONFIG += c++17 cmdline
 SOURCES += \
         main.cpp \
         message.cpp \
-        messageconvecter.cpp
+        messageconvecter.cpp \
         pivobackend.cpp
 
 # Default rules for deployment.
@@ -20,5 +20,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     message.h \
-    messageconvecter.h
+    messageconvecter.h \
     pivobackend.h
