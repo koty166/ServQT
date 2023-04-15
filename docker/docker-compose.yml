@@ -6,7 +6,8 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: VeryStrongPassword123ForBD
+      POSTGRES_USER: MypostgresUser
     ports:
-      - 5432:34652
+      - "127.0.0.1:34652:5432"
     volumes:
     - ./:/docker-entrypoint-initdb.d
