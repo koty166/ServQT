@@ -1,5 +1,6 @@
 QT = core \
-    widgets
+    widgets \
+    network
 
 CONFIG += c++17 cmdline
 

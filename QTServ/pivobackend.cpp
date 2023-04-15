@@ -1,12 +1,15 @@
 #include "pivobackend.h"
+#include "message.h"
+#include "messageconvecter.h"
 #include <QtNetwork/QtNetwork>
+#include <QList>
 
 PIVObackend::PIVObackend(int port, QWidget* pwgt /*=0*/) : QWidget(pwgt)
     , NextBlockSize(0)
 {
     tcpServer = new QTcpServer(this);
     if (!tcpServer->listen(QHostAddress::Any, port)) {
-        qDebug() << "Unable to connect to port " << port << ": " << tcpServer->errorString();
+        qDebug() << "Unable to connect to portx` " << port << ": " << tcpServer->errorString();
         tcpServer->close();
         return;
     }
@@ -14,17 +17,20 @@ PIVObackend::PIVObackend(int port, QWidget* pwgt /*=0*/) : QWidget(pwgt)
             this, SLOT(slotNewConnection())
             );
     qDebug() << "Connected to port " << port << ": " << tcpServer->errorString();
+    id_increment = 0;
 }
 void PIVObackend::slotNewConnection()
 {
     QTcpSocket* pClientSocket = tcpServer->nextPendingConnection();
+    connections[id_increment] = pClientSocket;
     connect(pClientSocket, SIGNAL(disconnected()),
-            pClientSocket, SLOT(deleteLater())
+            pClientSocket, SLOT(disconnectClient(id_increment))
             );
     connect(pClientSocket, SIGNAL(readyRead()),
             this, SLOT(slotReadClient())
             );
     sendToClient(pClientSocket, "Server Response: Connected!");
+    connections[id_increment] = pClientSocket;
 }
 
 void PIVObackend::slotReadClient()
@@ -42,13 +48,10 @@ void PIVObackend::slotReadClient()
         if (pClientSocket->bytesAvailable() < NextBlockSize) {
             break;
         }
-        QTime time;
-        QString str;
-        in >> time >> str;
-        QString strMessage =
-            time.toString() + " " + "Client has sended - " + str;
-        NextBlockSize = 0;
-        sendToClient(pClientSocket, "Server Response: Received \"" + str + "\"");
+        QByteArray JSONData;
+        in >> JSONData;
+        Message* msg = MessageConvecter::ConvertFromJSONToObject(JSONData);
+
     }
 }
 
@@ -61,4 +64,8 @@ void PIVObackend::sendToClient(QTcpSocket* pSocket, const QString& str)
     out.device()->seek(0);
     out << quint16(arrBlock.size() - sizeof(quint16));
     pSocket->write(arrBlock);
+}
+
+void PIVObackend::disconnectClient(int client_id){
+    connections.remove(client_id);
 }
