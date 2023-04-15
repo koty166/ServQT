@@ -27,14 +27,11 @@ public:
     }
     static QByteArray ConvertFromObjectToJSON(Message& MessageData)
     {
-       /* QJs JSONDoc;
-
-
-        JSONDoc["sender"] = MessageData.Sender;
-        MData->MessageText = JSONDoc["message"].toString();
-        MData->MessageTime = QDateTime::fromSecsSinceEpoch(JSONDoc["datetime"].isDouble());
-
-        return new QJsonDocument() toJson();*/
+        QJsonArray JsonArr;
+        JsonArr.append(MessageData.Sender);
+        JsonArr.append(MessageData.MessageText);
+        JsonArr.append(MessageData.MessageTime.toSecsSinceEpoch());
+        return (new QJsonDocument(JsonArr))->toJson();
     }
 signals:
 

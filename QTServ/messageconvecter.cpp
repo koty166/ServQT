@@ -7,7 +7,3 @@ MessageConvecter::MessageConvecter(QObject *parent)
 
 }
 
-static Message MessageConvecter::ConvertFromJSONToObject()
-{
-
-}
