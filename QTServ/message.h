@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDateTime>
 
+
 class Message : public QObject
 {
     Q_OBJECT
