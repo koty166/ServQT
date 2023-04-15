@@ -28,7 +28,7 @@ HEADERS += \
 
 
 # Includes
-INCLUDEPATH += /usr/local/opt/libpq/include
+INCLUDEPATH += /opt/homebrew/include
 
 # LIBS
-LIBS += -L/usr/local/opt/libpq/lib -lpq
+LIBS += -L/opt/homebrew/lib -lpq

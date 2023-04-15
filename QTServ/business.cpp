@@ -14,7 +14,7 @@ void Business::slotMess(Message& MessageData){
 }
 
 void Business::InsertIntoBD(Message& MessageData){
-    //вставка данных в бд
+
 }
 
 

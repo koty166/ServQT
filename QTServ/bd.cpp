@@ -11,10 +11,10 @@ bd::bd()
 bool bd::ConnectToBD()
 {
    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-   db.setDatabaseName("mirea");
-   db.setUserName("mirea");
+   db.setDatabaseName("postgres");
+   db.setUserName("MypostgresUser");
    db.setHostName("localhost");
-   db.setPassword("mirea");
+   db.setPassword("VeryStrongPassword123ForBD");
    if (!db.open())
    {
        return false;
@@ -22,18 +22,10 @@ bool bd::ConnectToBD()
    return true;
 }
 
-
-bool bd::SelectData()
-{
+bool bd::InputData(Message &MessageData){
     QSqlQueryModel* model = new QSqlQueryModel();
-    model->setQuery("SELECT * FROM employee;");
-
-    QSqlError err = model->lastError();
-    if (err.isValid()) {
-        qDebug() << err;
-        return false;
-    }
-    return true;
+    QString query = QString("INSERT INTO Messages (Sender, "
+                            "Message, Datetime) VALUES (%1, %2, %3)").arg(MessageData.Sender, MessageData.MessageText,
+                                                                          MessageData.MessageTime.toString());
+    model->setQuery(query);
 }
-
-b
