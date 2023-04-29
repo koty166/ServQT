@@ -33,10 +33,12 @@ public:
         JsonArr.append(MessageData.MessageTime.toSecsSinceEpoch());
         return (new QJsonDocument(JsonArr))->toJson();
     }
-    static char* [] ConvertFromObjectToByteArray(Message& MessageData)
+    static char* ConvertFromObjectToByteArray(QByteArray& MessageData)
     {
-        char* data[2];
-        return data;
+        char* Data = new char[MessageData.length()];
+        for(int i = 0; i < MessageData.length(); i++)
+            Data[i] = MessageData[i];
+        return Data;
     }
 signals:
 

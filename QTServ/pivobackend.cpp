@@ -42,10 +42,12 @@ void PIVObackend::slotReadClient()
     in.setVersion(QDataStream::Qt_5_15);
 
     QByteArray JSONData = pClientSocket->readAll();
-
     sendToClient(new QTcpSocket(), "your message has been recieved");
     Message* msg = MessageConvecter::ConvertFromJSONToObject(JSONData);
-    sendMsgToAllClients(MessageConvecter::ConvertFromObjectToByteArray(msg));
+    char * BufAddr = MessageConvecter::ConvertFromObjectToByteArray(JSONData);
+    sendMsgToAllClients(BufAddr);
+    delete BufAddr;
+
     //QTextStream(stdout) << JSONData;
 }
 
