@@ -36,24 +36,16 @@ void PIVObackend::slotNewConnection()
 
 void PIVObackend::slotReadClient()
 {
+
     QTcpSocket* pClientSocket = (QTcpSocket*)sender();
     QDataStream in(pClientSocket);
     in.setVersion(QDataStream::Qt_5_15);
-    for (;;) {
-        if (!NextBlockSize) {
-            if (pClientSocket->bytesAvailable() < sizeof(quint16)) {
-                break;
-            }
-            in >> NextBlockSize;
-        }
-        if (pClientSocket->bytesAvailable() < NextBlockSize) {
-            break;
-        }
-        QByteArray JSONData;
-        in >> JSONData;
-        Message* msg = MessageConvecter::ConvertFromJSONToObject(JSONData);
 
-    }
+    QByteArray JSONData = pClientSocket->readAll();
+
+    sendToClient(new QTcpSocket(), "your message has been recieved");
+    Message* msg = MessageConvecter::ConvertFromJSONToObject(JSONData);
+    QTextStream(stdout) << JSONData;
 }
 
 void PIVObackend::sendToClient(QTcpSocket* pSocket, const QString& str)
