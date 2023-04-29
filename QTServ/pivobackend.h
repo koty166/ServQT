@@ -1,14 +1,15 @@
 #ifndef PIVOBACKEND_H
 #define PIVOBACKEND_H
 
-#include <QWidget>
 #include <QMap>
+#include <QtCore>
+#include <QObject>
 
 class QTcpServer;
 class QTextEdit;
 class QTcpSocket;
 
-class PIVObackend : public QWidget
+class PIVObackend : QObject
 {
     Q_OBJECT
 private:
@@ -20,7 +21,7 @@ private:
 private:
     void sendToClient(QTcpSocket* pSocket, const QString& str);
 public:
-    PIVObackend(int port, QWidget* pwgt = 0);
+    PIVObackend(int port);
 public slots:
     virtual void slotNewConnection();
     void slotReadClient ();

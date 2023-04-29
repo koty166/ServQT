@@ -3,20 +3,21 @@
 #include "messageconvecter.h"
 #include <QtNetwork/QtNetwork>
 #include <QList>
+#include <QObject>
 
-PIVObackend::PIVObackend(int port, QWidget* pwgt /*=0*/) : QWidget(pwgt)
+PIVObackend::PIVObackend(int port) : QObject()
     , NextBlockSize(0)
 {
     tcpServer = new QTcpServer(this);
     if (!tcpServer->listen(QHostAddress::Any, port)) {
-        qDebug() << "Unable to connect to portx` " << port << ": " << tcpServer->errorString();
+        QTextStream(stdout) << "Unable to connect to portx` " << port << ": " << tcpServer->errorString();
         tcpServer->close();
         return;
     }
     connect(tcpServer, SIGNAL(newConnection()),
             this, SLOT(slotNewConnection())
             );
-    qDebug() << "Connected to port " << port << ": " << tcpServer->errorString();
+    QTextStream(stdout) << "Connected to port " << port << ": " << tcpServer->errorString();
     id_increment = 0;
 }
 void PIVObackend::slotNewConnection()

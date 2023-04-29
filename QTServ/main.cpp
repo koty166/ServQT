@@ -6,6 +6,6 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    PIVObackend backend(80);
+    PIVObackend backend(8000);
     return a.exec();
 }
