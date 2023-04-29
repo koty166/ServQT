@@ -26,6 +26,7 @@ public slots:
     virtual void slotNewConnection();
     void slotReadClient ();
     void disconnectClient(int client_id);
+    void sendMsgToAllClients(char* msg);
 };
 
 #endif // PIVOBACKEND_H

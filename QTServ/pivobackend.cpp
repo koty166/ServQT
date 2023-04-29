@@ -45,7 +45,8 @@ void PIVObackend::slotReadClient()
 
     sendToClient(new QTcpSocket(), "your message has been recieved");
     Message* msg = MessageConvecter::ConvertFromJSONToObject(JSONData);
-    QTextStream(stdout) << JSONData;
+    sendMsgToAllClients(MessageConvecter::ConvertFromObjectToByteArray(msg));
+    //QTextStream(stdout) << JSONData;
 }
 
 void PIVObackend::sendToClient(QTcpSocket* pSocket, const QString& str)
@@ -61,4 +62,10 @@ void PIVObackend::sendToClient(QTcpSocket* pSocket, const QString& str)
 
 void PIVObackend::disconnectClient(int client_id){
     connections.remove(client_id);
+}
+
+void PIVObackend::sendMsgToAllClients(char* msg){
+    for (int i = 0; i < connections.count(); ++i){
+        connections[i]->write(msg);
+    }
 }
