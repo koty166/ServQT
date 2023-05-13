@@ -24,14 +24,11 @@ void PIVObackend::slotNewConnection()
 {
     QTcpSocket* pClientSocket = tcpServer->nextPendingConnection();
     connections[id_increment] = pClientSocket;
-    connect(pClientSocket, SIGNAL(disconnected()),
-            pClientSocket, SLOT(disconnectClient(id_increment))
-            );
-    connect(pClientSocket, SIGNAL(readyRead()),
-            this, SLOT(slotReadClient())
-            );
-    //sendToClient(pClientSocket, "Server Response: Connected!");
+    connect(pClientSocket, SIGNAL(disconnected()), this, SLOT(PIVOBackend::disconnectClient));  //это не будет работать, потому что disconnectClient принимает аргумент, а сигнал disconnected ничего не отправляет
+    connect(pClientSocket, &QTcpSocket::readyRead, this, &PIVObackend::slotReadClient);
+    sendToClient(pClientSocket, "Server Response: Connected!");
     connections[id_increment] = pClientSocket;
+    id_increment++;
 }
 
 void PIVObackend::slotReadClient()
@@ -48,7 +45,7 @@ void PIVObackend::slotReadClient()
 
     QTextStream(stdout) << BufAddr;
     sendMsgToAllClients(BufAddr);
-    delete BufAddr;
+    delete[] BufAddr;
     delete msg;
 
     //QTextStream(stdout) << JSONData;
@@ -64,6 +61,7 @@ void PIVObackend::sendToClient(QTcpSocket* pSocket, const QString& str)
     out.device()->seek(0);
     out << quint16(arrBlock.size() - sizeof(quint16));
     pSocket->write(arrBlock);
+
 }
 
 void PIVObackend::disconnectClient(int client_id){
