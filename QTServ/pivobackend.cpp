@@ -30,7 +30,7 @@ void PIVObackend::slotNewConnection()
     connect(pClientSocket, SIGNAL(readyRead()),
             this, SLOT(slotReadClient())
             );
-    sendToClient(pClientSocket, "Server Response: Connected!");
+    //sendToClient(pClientSocket, "Server Response: Connected!");
     connections[id_increment] = pClientSocket;
 }
 
@@ -42,17 +42,21 @@ void PIVObackend::slotReadClient()
     in.setVersion(QDataStream::Qt_5_15);
 
     QByteArray JSONData = pClientSocket->readAll();
-    sendToClient(new QTcpSocket(), "your message has been recieved");
+    //sendToClient(new QTcpSocket(), "your message has been recieved");
     Message* msg = MessageConvecter::ConvertFromJSONToObject(JSONData);
     char * BufAddr = MessageConvecter::ConvertFromObjectToByteArray(JSONData);
+
+    QTextStream(stdout) << BufAddr;
     sendMsgToAllClients(BufAddr);
     delete BufAddr;
+    delete msg;
 
     //QTextStream(stdout) << JSONData;
 }
 
 void PIVObackend::sendToClient(QTcpSocket* pSocket, const QString& str)
 {
+    QTextStream(stdout) << str;
     QByteArray arrBlock;
     QDataStream out(&arrBlock, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_15);

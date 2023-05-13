@@ -35,9 +35,11 @@ public:
     }
     static char* ConvertFromObjectToByteArray(QByteArray& MessageData)
     {
-        char* Data = new char[MessageData.length()];
-        for(int i = 0; i < MessageData.length(); i++)
+        int Len = MessageData.length();
+        char* Data = new char[Len+1];
+        for(int i = 0; i < Len; i++)
             Data[i] = MessageData[i];
+        Data[Len] = '\0';
         return Data;
     }
 signals:
