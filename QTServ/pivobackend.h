@@ -9,22 +9,24 @@ class QTcpServer;
 class QTextEdit;
 class QTcpSocket;
 
-class PIVObackend : QObject
+class PIVObackend : public QObject
 {
     Q_OBJECT
 private:
     QTcpServer* tcpServer;
     quint16 NextBlockSize;
-    QMap<int, QTcpSocket*> connections;
+
     int id_increment;
 
 private:
     void sendToClient(QTcpSocket* pSocket, const QString& str);
 public:
     PIVObackend(int port);
+    QMap<int, QTcpSocket*> connections;
 public slots:
+
     virtual void slotNewConnection();
-    void slotReadClient ();
+    void slotReadClient();
     void disconnectClient(int client_id);
     void sendMsgToAllClients(char* msg);
 };
